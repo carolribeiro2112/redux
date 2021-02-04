@@ -1,24 +1,42 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+
+import Cart from './components/Cart';
+import Decrease from './components/Decrease';
+import Increase from './components/Increase'; 
+
+import {Store} from './types/store';
+
+const initialState: Store = {
+  quantity: 0
+}
+
+function reducer(state = initialState, action: any) {
+  switch(action.type) {
+    case 'AUMENTAR_QUANTIDADE':
+      return {
+        quantity: state.quantity + 1
+      };
+    case 'DIMINUIR_QUANTIDADE':
+      return {
+        quantity: state.quantity > 0 ? state.quantity - 1 : state.quantity,
+      };
+    default: 
+      return state
+  }
+}
+
+const store = createStore(reducer)
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Provider store={store}>
+        <Cart/>
+        <Decrease/>
+        <Increase/>
+      </Provider>
     </div>
   );
 }
